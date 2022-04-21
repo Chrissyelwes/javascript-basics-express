@@ -39,10 +39,16 @@ app.get('/strings/first-characters/:string', (req, res) => {
 // NUMBERS ROUTES *******************************************
 
 app.get('/numbers/add/:a/and/:b', (req, res) => {
+  // eslint-disable-next-line radix
   const a = parseInt(req.params.a);
+  // eslint-disable-next-line radix
   const b = parseInt(req.params.b);
 
-  res.status(200).json({ result: add(a, b) });
+  if (Number.isNaN(a, b)) {
+    res.status(400).json({ error: 'Parameters must be valid numbers.' });
+  } else {
+    res.status(200).json({ result: add(a, b) });
+  }
 });
 
 module.exports = app;
