@@ -1,3 +1,4 @@
+// STRINGS ROUTES *******************************************
 const express = require('express');
 const { sayHello } = require('./lib/strings');
 const { uppercase } = require('./lib/strings');
@@ -5,8 +6,12 @@ const { lowercase } = require('./lib/strings');
 const { firstCharacter } = require('./lib/strings');
 const { firstCharacters } = require('./lib/strings');
 
+// NUMBERS ROUTES *******************************************
+const { add } = require('./lib/numbers');
+
 const app = express();
 
+// STRINGS ROUTES *******************************************
 app.get('/strings/hello/:string', (req, res) => {
   res.status(200).json({ result: sayHello(req.params.string) });
 });
@@ -29,6 +34,15 @@ app.get('/strings/first-characters/:string', (req, res) => {
   } else {
     res.json({ result: firstCharacter(req.params.string) });
   }
+});
+
+// NUMBERS ROUTES *******************************************
+
+app.get('/numbers/add/:a/and/:b', (req, res) => {
+  const a = parseInt(req.params.a);
+  const b = parseInt(req.params.b);
+
+  res.status(200).json({ result: add(a, b) });
 });
 
 module.exports = app;
