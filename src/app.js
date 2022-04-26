@@ -16,7 +16,7 @@ const { firstCharacters } = require('./lib/strings');
 const { add } = require('./lib/numbers');
 const { subtract } = require('./lib/numbers');
 const { multiply } = require('./lib/numbers');
-// const { divide } = require('./lib/numbers');
+const { divide } = require('./lib/numbers');
 // const { remainder } = require('./lib/numbers');
 
 const app = express();
@@ -88,6 +88,13 @@ app.post('/numbers/multiply', (req, res) => {
   } else {
     res.status(200).json({ result: multiply(a, b) });
   }
+});
+
+app.post('/numbers/divide', (req, res) => {
+  const { a } = req.body;
+  const { b } = req.body;
+
+  res.status(200).json({ result: divide(a, b) });
 });
 
 module.exports = app;
