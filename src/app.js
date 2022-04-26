@@ -76,11 +76,18 @@ app.get('/numbers/subtract/:a/from/:b', (req, res) => {
 });
 
 app.post('/numbers/multiply', (req, res) => {
-  const { a } = req.body.a;
-  const { b } = req.body.b;
+  const { a } = req.body;
+  const { b } = req.body;
 
-  return a === '' || b === ''
-    ? res.status(400).json({ error: 'Parameters "a" and "b" are required.' })
-    : res.status(200).json({ result: multiply(req.body.a, req.body.b) });
+  // make it short with ternary
+  if (!a || !b) {
+    res.status(400).json({ error: 'Parameters "a" and "b" are required.' });
+    // eslint-disable-next-line radix
+  } else if (Number.isNaN(parseInt(a) || parseInt(b))) {
+    res.status(400).json({ error: 'Parameters "a" and "b" must be valid numbers.' });
+  } else {
+    res.status(200).json({ result: multiply(a, b) });
+  }
 });
+
 module.exports = app;
