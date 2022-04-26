@@ -1,5 +1,10 @@
 // STRINGS ROUTES *******************************************
+// **********************************************************
 const express = require('express');
+const req = require('express/lib/request');
+
+// STRINGS ROUTES *******************************************
+// **********************************************************
 const { sayHello } = require('./lib/strings');
 const { uppercase } = require('./lib/strings');
 const { lowercase } = require('./lib/strings');
@@ -7,11 +12,18 @@ const { firstCharacter } = require('./lib/strings');
 const { firstCharacters } = require('./lib/strings');
 
 // NUMBERS ROUTES *******************************************
+// **********************************************************
 const { add } = require('./lib/numbers');
+const { subtract } = require('./lib/numbers');
+const { multiply } = require('./lib/numbers');
+// const { divide } = require('./lib/numbers');
+// const { remainder } = require('./lib/numbers');
 
 const app = express();
+app.use(express.json());
 
 // STRINGS ROUTES *******************************************
+// **********************************************************
 app.get('/strings/hello/:string', (req, res) => {
   res.status(200).json({ result: sayHello(req.params.string) });
 });
@@ -37,13 +49,14 @@ app.get('/strings/first-characters/:string', (req, res) => {
 });
 
 // NUMBERS ROUTES *******************************************
-
+// **********************************************************
 app.get('/numbers/add/:a/and/:b', (req, res) => {
   // eslint-disable-next-line radix
   const a = parseInt(req.params.a);
   // eslint-disable-next-line radix
   const b = parseInt(req.params.b);
 
+  // Make it short
   if (Number.isNaN(a, b)) {
     res.status(400).json({ error: 'Parameters must be valid numbers.' });
   } else {
@@ -51,4 +64,23 @@ app.get('/numbers/add/:a/and/:b', (req, res) => {
   }
 });
 
+app.get('/numbers/subtract/:a/from/:b', (req, res) => {
+  // eslint-disable-next-line radix
+  const a = parseInt(req.params.a);
+  // eslint-disable-next-line radix
+  const b = parseInt(req.params.b);
+
+  return Number.isNaN(a) || Number.isNaN(b)
+    ? res.status(400).json({ error: 'Parameters must be valid numbers.' })
+    : res.status(200).json({ result: subtract(-a, -b) });
+});
+
+app.post('/numbers/multiply', (req, res) => {
+  const { a } = req.body.a;
+  const { b } = req.body.b;
+
+  return a === '' || b === ''
+    ? res.status(400).json({ error: 'Parameters "a" and "b" are required.' })
+    : res.status(200).json({ result: multiply(req.body.a, req.body.b) });
+});
 module.exports = app;
